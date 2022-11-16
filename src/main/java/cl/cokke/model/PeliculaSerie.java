@@ -42,7 +42,7 @@ public class PeliculaSerie {
 	private Long id;
 	
 	@Column(name="titulo")
-	private String tittulo;
+	private String titulo;
 	
 	@Column(name="fecha_creacion")
 	@Temporal(TemporalType.DATE)
@@ -53,6 +53,9 @@ public class PeliculaSerie {
 	@Max(5)
 	@Min(1)
 	private int calificacion;
+	
+	@Column(name="image")
+	private String image;
 	
 	//@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@ManyToMany ()
