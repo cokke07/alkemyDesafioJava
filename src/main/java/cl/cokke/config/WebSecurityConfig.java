@@ -27,9 +27,9 @@ public class WebSecurityConfig {
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests()
-		.antMatchers("/api/v1/auth/signin").permitAll()
-		.antMatchers("/api/v1/auth/signup").permitAll()
-		.antMatchers("/api/v1/auth/**").hasAnyRole("ADMIN")
+		.antMatchers("/auth/login").permitAll()
+		.antMatchers("/auth/register").permitAll()
+		.antMatchers("auth/**").hasAnyRole("ADMIN")
 		.antMatchers("/api/v1/disney/**").hasAnyRole("CLIENT")
 		.anyRequest().authenticated();
 		
