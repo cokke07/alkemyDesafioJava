@@ -13,6 +13,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import cl.cokke.security.JwtTokenFilterConfigurer;
 import cl.cokke.security.JwtTokenProvider;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 
 @Configuration
 //@EnableWebSecurity
@@ -29,6 +32,8 @@ public class WebSecurityConfig {
 		http.authorizeRequests()
 		.antMatchers("/auth/login").permitAll()
 		.antMatchers("/auth/register").permitAll()
+		.antMatchers("/swagger-ui/**").permitAll()
+		.antMatchers("/docs/**").permitAll()
 		.antMatchers("auth/**").hasAnyRole("ADMIN")
 		.antMatchers("/api/v1/disney/**").hasAnyRole("CLIENT")
 		.anyRequest().authenticated();
@@ -47,5 +52,13 @@ public class WebSecurityConfig {
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder(12);
+	}
+	
+	@Bean
+	public OpenAPI customOpenAPI() {
+		return new OpenAPI()
+				.components(new Components()
+				.addSecuritySchemes("Bearer",
+				new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("Bearer").bearerFormat("JWT")));
 	}
 }
