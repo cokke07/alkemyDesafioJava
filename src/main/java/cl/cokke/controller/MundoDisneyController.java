@@ -189,7 +189,7 @@ public class MundoDisneyController {
 
 		Optional<PeliculaSerie> peliSerieEncontrada = peliculaSerieServicio.buscarPorId(id);
 		if (peliSerieEncontrada.isPresent()) {
-			peliSerieEncontrada.get().setTittulo(p.getTittulo());
+			peliSerieEncontrada.get().setTitulo(p.getTitulo());
 			peliSerieEncontrada.get().setFechaCreacion(p.getFechaCreacion());
 			peliSerieEncontrada.get().setCalificacion(p.getCalificacion());
 			peliSerieEncontrada.get().setPersonajes(p.getPersonajes());

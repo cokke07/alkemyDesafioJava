@@ -19,7 +19,7 @@ import cl.cokke.model.User;
 import cl.cokke.service.UserService;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/auth")
 public class AuthController {
 	
 	@Autowired
@@ -56,14 +56,14 @@ public class AuthController {
 		userService.delete(User);
 	}
 	
-	@PostMapping("/signin")
+	@PostMapping("/login")
 	public String login(@RequestParam String username, @RequestParam String password) {
 		System.out.println(username);
 		System.out.println(password);
 		return userService.signIn(username, password);
 	}
 	
-	@PostMapping("/signup")
+	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public String signup(@RequestBody User User) {
 		System.out.println(User);

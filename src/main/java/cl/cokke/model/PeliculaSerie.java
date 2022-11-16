@@ -1,5 +1,6 @@
 package cl.cokke.model;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -12,8 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -37,15 +42,20 @@ public class PeliculaSerie {
 	private Long id;
 	
 	@Column(name="titulo")
-	private String tittulo;
+	private String titulo;
 	
 	@Column(name="fecha_creacion")
-	private String fechaCreacion;
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date fechaCreacion;
 	
 	@Column(name="calificacion")
 	@Max(5)
 	@Min(1)
 	private int calificacion;
+	
+	@Column(name="image")
+	private String image;
 	
 	//@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@ManyToMany ()
