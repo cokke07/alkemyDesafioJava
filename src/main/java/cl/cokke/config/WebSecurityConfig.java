@@ -15,6 +15,7 @@ import cl.cokke.security.JwtTokenFilterConfigurer;
 import cl.cokke.security.JwtTokenProvider;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 
 @Configuration
@@ -59,6 +60,15 @@ public class WebSecurityConfig {
 		return new OpenAPI()
 				.components(new Components()
 				.addSecuritySchemes("Bearer",
-				new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("Bearer").bearerFormat("JWT")));
+						new SecurityScheme()
+						.type(SecurityScheme.Type.HTTP)
+						.scheme("Bearer")
+						.bearerFormat("JWT")))
+				.info(
+						new Info()
+						.title("Documentación API Disney")
+						.description("API Disney 2.0 desafio Alkemys")
+						);
+				
 	}
 }
