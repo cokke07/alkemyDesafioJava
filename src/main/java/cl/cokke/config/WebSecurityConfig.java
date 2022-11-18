@@ -22,53 +22,51 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 //@EnableWebSecurity
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
-	
+
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
-	
-	 @Bean
-	    SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+
+	@Bean
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests()
-		.antMatchers("/auth/login").permitAll()
-		.antMatchers("/auth/register").permitAll()
 		.antMatchers("/swagger-ui/**").permitAll()
 		.antMatchers("/docs/**").permitAll()
-		.antMatchers("auth/**").hasAnyRole("ADMIN")
-		.antMatchers("/api/v1/disney/**").hasAnyRole("CLIENT")
+		.antMatchers("/auth/**").permitAll()
+		.antMatchers("/api/v1/disney/**").permitAll()
 		.anyRequest().authenticated();
-		
+
 		http.exceptionHandling().accessDeniedPage("/login");
 		http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
-		
+
 		return http.build();
 	}
-	
+
 	@Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-	
+	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+			throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
+
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder(12);
 	}
-	
+
 	@Bean
 	public OpenAPI customOpenAPI() {
 		return new OpenAPI()
 				.components(new Components()
-				.addSecuritySchemes("Bearer",
-						new SecurityScheme()
-						.type(SecurityScheme.Type.HTTP)
-						.scheme("Bearer")
-						.bearerFormat("JWT")))
-				.info(
-						new Info()
+						.addSecuritySchemes("Bearer",
+								new SecurityScheme()
+								.type(SecurityScheme.Type.HTTP)
+								.scheme("Bearer")
+								.bearerFormat("JWT")))
+				.info(new Info()
 						.title("Documentación API Disney")
-						.description("API Disney 2.0 desafio Alkemys")
-						);
-				
+						.description("API Disney 2.0 desafio Alkemys"));
+
 	}
+	
 }

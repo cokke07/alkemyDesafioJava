@@ -27,49 +27,28 @@ public class AuthController {
 	@Autowired
 	private UserService userService;
 	
-//	@Autowired
-//	public UserController(UserService userService) {
-//		super();
-//		this.userService = userService;
-//	}
-	
-	@GetMapping
-	@ResponseStatus(HttpStatus.OK)
-	public List<User> findAll() {
-		return userService.findAll();
-	}
-	
-	@GetMapping("/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public User findOne(@PathVariable Long id) {
-		//@PathVariable: Recibe id desde la URL
-		return userService.findById(id);
-	}
-	
-	@PutMapping
-	@ResponseStatus(HttpStatus.OK)
-	public void update(@RequestBody User User) {
-		userService.update(User);
-	}
-	
-	@DeleteMapping
-	@ResponseStatus(HttpStatus.OK)
-	public void delete(@RequestBody User User) {
-		userService.delete(User);
-	}
 	
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
 		//System.out.println(username);
 		//System.out.println(password);
-		String token = userService.signIn(loginDTO.getUsername(), loginDTO.getPassword());
+		String token = userService.login(loginDTO.getUsername(), loginDTO.getPassword());
 		return ResponseEntity.ok().body(token);
 	}
 	
 	@PostMapping("/register")
-	@ResponseStatus(HttpStatus.CREATED)
-	public String signup(@RequestBody User User) {
-		System.out.println(User);
-		return userService.signUp(User);
+	public ResponseEntity<User> crearUsuario(@RequestBody User User) {
+		//System.out.println(User);
+		userService.crearUser(User);
+		System.out.println("Role: " + User.getRoles());
+		return ResponseEntity.ok().body(User);
 	}
+	
+	
+	@GetMapping
+	public ResponseEntity<List<User>> findAll() {
+		
+		return ResponseEntity.ok().body(userService.findAll());
+	}
+
 }

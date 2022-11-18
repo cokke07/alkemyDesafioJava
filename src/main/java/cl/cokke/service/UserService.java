@@ -8,11 +8,8 @@ import cl.cokke.model.User;
 
 public interface UserService {
 	
-	void update(User user);
 	List<User> findAll();
-	User findById(Long id);
-	void delete(User user);
-	String signIn(String username, String password);
-	String signUp(User User);
+	String login(String username, String password);
+	User crearUser(User User);
 	UserDetails loadUserByUsername(String username);
 }

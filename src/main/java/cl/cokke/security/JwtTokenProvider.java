@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import cl.cokke.exception.RestServiceException;
 import cl.cokke.model.Role;
+import cl.cokke.repository.UserRepository;
 import cl.cokke.service.UserService;
 
 import io.jsonwebtoken.Claims;
@@ -33,16 +34,7 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtTokenProvider {
 
-	/*
-	 * La clase JwtTokenProvider dentro de la carpeta security, este tiene las
-	 * siguientes responsabilidades: 1. Verifique la firma del token de acceso. 2.
-	 * Si el token de acceso tiene un formato incorrecto, caducó o simplemente si el
-	 * token no está firmado con la clave de firma adecuada, se generará una
-	 * excepción de autenticación.
-	 */
-
 	@Value("${security.jwt.token.secret-key}")
-//	private String secretKey;
 	static SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 	
 	@Value("${security.jwt.token.expire-length}")
@@ -50,16 +42,10 @@ public class JwtTokenProvider {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserRepository userRepository;
 
-//	@PostConstruct
-//	protected void init() {
-//		secretKey = Base64.getEncoder().encodeToString(secretKey.getEncoded());
-//		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-//	}
-//	@PostConstruct
-//	public static SecretKey generateKey() {
-//		  return generateKey();
-//	}
 	@PostConstruct
 	public static String convertSecretKeyToString() throws NoSuchAlgorithmException {
 	    byte[] rawData = secretKey.getEncoded();
@@ -70,11 +56,15 @@ public class JwtTokenProvider {
 	public String createToken(String username, List<Role> roles) {
 
 		Claims claims = Jwts.claims().setSubject(username);
-		claims.put("auth", roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority()))
-				.filter(Objects::nonNull).collect(Collectors.toList()));
+		claims.put("auth", userRepository.findByUsername(username).getRoles());
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + validateInMilliseconds);
-		return Jwts.builder().setClaims(claims).setExpiration(validity).signWith(secretKey).compact();
+		return Jwts.builder()
+				.setClaims(claims)
+				.setIssuedAt(now)
+				.setExpiration(validity)
+				.signWith(secretKey)
+				.compact();
 	}
 
 	public Authentication getAuthentication(String token) {
