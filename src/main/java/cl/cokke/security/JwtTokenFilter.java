@@ -14,17 +14,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import cl.cokke.exception.RestServiceException;
 
 public class JwtTokenFilter extends OncePerRequestFilter {
-
-	/*
-	 * Este filtro tiene las siguientes responsabilidades: 
-	 * ● Verificar el token de acceso en el encabezado de autorización. Si se encuentra el token de acceso
-	 * en el encabezado, se delega la autenticación a JwtTokenProvider, de lo
-	 * contrario, arroja una excepción de autenticación. 
-	 * ● Invoca estrategias de éxito o fracaso basadas en el resultado del proceso de autenticación
-	 * realizado por JwtTokenProvider. 
-	 * ● Se invoca chain.doFilter pasando como parámetros httpServletRequest, httpServletResponse, 
-	 * tras una autenticación exitosa.
-	 */
 	
 	private JwtTokenProvider jwtTokenProvider;
 

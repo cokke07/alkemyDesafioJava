@@ -34,18 +34,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
-//	@Autowired
-//	public UserServiceImpl(UserRepository userRepository) {
-//		this.userRepository = userRepository;
-//	}
-
-	@Override
-	@Transactional
-	public void update(User User) {
-		// Idem anterior, pero en este caso actualiza con metodo interno de JPARepository
-		userRepository.save(User);
-	}
 
 	@Override
 	@Transactional(readOnly = true)
@@ -56,24 +44,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public User findById(Long id) {
-		// Retorna un Optional<User> y luego se convierte en un User
-		// Optional es útil para manejar opcionalidades, de esta forma, se evitan
-		// valores nulos (NullPointerException desaparecen)
-		return userRepository.findById(id).orElse(new User());
-	}
-
-	@Override
-	@Transactional
-	public void delete(User User) {
-		// Se llama metodo delete y se entrega un User, primero transformandolo de
-		// User a User con metodo toEtity
-		userRepository.delete(User);
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public String signIn(String username, String password) {
+	public String login(String username, String password) {
 		try {
 			//Validar datos de inicio de sesion
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -89,7 +60,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	@Transactional
-	public String signUp(User User) {
+	public User crearUser(User User) {
 		//Valida si el nombre de usuario no exista
 		if (!userRepository.existsByUsername(User.getUsername())) {
 			//Se encripta contraseña  
@@ -97,7 +68,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 			//Se almacena el usuario
 			userRepository.save(User);
 			//Retrona token valido para este usuario
-			return jwtTokenProvider.createToken(User.getUsername(), User.getRoles());
+			jwtTokenProvider.createToken(User.getUsername(), User.getRoles());
+			return User;
 		} else {
 			//En caso de que nombre de usuario exista se retonra excepcion
 			throw new RestServiceException("Username ya esta en uso", HttpStatus.UNPROCESSABLE_ENTITY);

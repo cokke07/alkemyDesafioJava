@@ -6,12 +6,6 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 public class JwtTokenFilterConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
-
-	/*
-	 * Se crea la clase JwtTokenFilterConfigurer. Para agregar el JwtTokenFilter a
-	 * DefaultSecurityFilterChain de Spring Security, se debe sobreescribir el
-	 * método configure de SecurityConfigurerAdapter.
-	 */
 	
 	private JwtTokenProvider jwtTokenProvider;
 	
