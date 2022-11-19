@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.cokke.dto.PersonajeDTO;
 import cl.cokke.model.Genero;
 import cl.cokke.model.PeliculaSerie;
 import cl.cokke.model.Personaje;
@@ -39,8 +40,8 @@ public class MundoDisneyController {
 
 	// Buscar todos los personajes y mostrarlos en la peticion
 	@GetMapping("/characters")
-	public ResponseEntity<List<Personaje>> listarTodos() {
-		List<Personaje> personajes = new ArrayList<Personaje>();
+	public ResponseEntity<List<PersonajeDTO>> listarTodos() {
+		List<PersonajeDTO> personajes = new ArrayList<PersonajeDTO>();
 		personajes = personajeServicio.buscarTodos();
 
 		if (personajes.isEmpty()) {
@@ -101,7 +102,7 @@ public class MundoDisneyController {
 			personajeEncontrado.get().setEdad(p.getEdad());
 			personajeEncontrado.get().setPeso(p.getPeso());
 			personajeEncontrado.get().setHistoria(p.getHistoria());
-			personajeEncontrado.get().setImage(p.getImage());
+			personajeEncontrado.get().setImagen(p.getImagen());
 
 			return new ResponseEntity<>(personajeServicio.guardarPersonaje(personajeEncontrado.get()), HttpStatus.OK);
 		} else {

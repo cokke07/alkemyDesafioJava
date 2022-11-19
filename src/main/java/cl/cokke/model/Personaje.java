@@ -4,12 +4,15 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,16 +48,12 @@ public class Personaje {
 	@Column(name="historia")
 	private String historia;
 	
-	@Column(name="image")
-	private String image;
+	@Column(name="imagen")
+	private String imagen;
 	
-	@ManyToMany ()
-    @JoinTable(
-            name = "personajes_x_peliculas",
-            joinColumns = @JoinColumn(name = "id_personaje"),
-            inverseJoinColumns = @JoinColumn(name = "id_pelicula_serie"))
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnore
-    private List<PeliculaSerie> peliculaSerie;
+    private PeliculaSerie peliculaSerie;
 	
 	
 }

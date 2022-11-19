@@ -3,6 +3,7 @@ package cl.cokke.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -57,13 +59,11 @@ public class PeliculaSerie {
 	@Column(name="image")
 	private String image;
 	
-	//@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	@ManyToMany ()
+	@OneToMany(mappedBy = "peliculaSerie", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Personaje> personajes;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_genero", referencedColumnName = "id_genero")
-	@JsonBackReference
+	@JsonIgnore
 	private Genero genero;
 }

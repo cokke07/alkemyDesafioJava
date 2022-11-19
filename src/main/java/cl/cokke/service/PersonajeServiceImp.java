@@ -9,6 +9,8 @@ import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cl.cokke.dto.PersonajeDTO;
+import cl.cokke.mapper.PersonajeMapper;
 import cl.cokke.model.Personaje;
 import cl.cokke.repository.PersonajeRepository;
 
@@ -18,10 +20,14 @@ public class PersonajeServiceImp implements PersonajeService {
 	@Autowired
 	private PersonajeRepository personajeRepository;
 	
+	@Autowired
+	private PersonajeMapper personajeMapper;
+	
 	@Override
-	public List<Personaje> buscarTodos() {
+	public List<PersonajeDTO> buscarTodos() {
 		// TODO Auto-generated method stub
-		return personajeRepository.findAll();
+		List<Personaje> personajes = personajeRepository.findAll();
+		return personajeMapper.convertirAListPersonajeDTO(personajes);
 	}
 
 	@Override
