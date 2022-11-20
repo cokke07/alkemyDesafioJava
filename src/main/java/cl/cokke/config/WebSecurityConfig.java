@@ -32,8 +32,9 @@ public class WebSecurityConfig {
 		.antMatchers("/swagger-ui/**").permitAll()
 		.antMatchers("/docs/**").permitAll()
 		.antMatchers("/auth/**").permitAll()
-		.antMatchers("/api/v1/disney/**").permitAll()
 		.anyRequest().authenticated();
+		//.antMatchers("/api/v1/disney/**").permitAll()
+		
 
 		http.exceptionHandling().accessDeniedPage("/login");
 		http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));

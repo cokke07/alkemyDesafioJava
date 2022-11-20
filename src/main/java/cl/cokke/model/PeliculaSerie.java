@@ -64,6 +64,5 @@ public class PeliculaSerie {
 	private List<Personaje> personajes;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
 	private Genero genero;
 }

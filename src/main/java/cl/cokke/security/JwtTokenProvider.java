@@ -43,8 +43,6 @@ public class JwtTokenProvider {
 	@Autowired
 	private UserService userService;
 	
-	@Autowired
-	private UserRepository userRepository;
 
 	@PostConstruct
 	public static String convertSecretKeyToString() throws NoSuchAlgorithmException {
@@ -56,7 +54,8 @@ public class JwtTokenProvider {
 	public String createToken(String username, List<Role> roles) {
 
 		Claims claims = Jwts.claims().setSubject(username);
-		claims.put("auth", userRepository.findByUsername(username).getRoles());
+		claims.put("auth", roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority()))
+				.filter(Objects::nonNull).collect(Collectors.toList()));
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + validateInMilliseconds);
 		return Jwts.builder()
