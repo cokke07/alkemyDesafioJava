@@ -16,7 +16,10 @@ public interface PersonajeRepository extends JpaRepository<Personaje, Long> {
 	@Query(value = "SELECT * FROM personaje U WHERE LOWER(U.nombre) LIKE %?1%",nativeQuery = true)
 	public List<Personaje> findByNombre(String nombre);
 	//forma declarativa para obtener automaticamente
-	public Personaje findByNombreContainingIgnoreCase(String searchTerm);
+	public List<Personaje> findByNombreContainingIgnoreCase(String searchTerm);
 	
 	public List<Personaje> findAllByEdad(Integer edad);
+	
+	@Query(value = "SELECT * FROM personajes P where P.pelicula_serie_id_pelicula_serie = ?",nativeQuery = true)
+	public List<Personaje> findByPeliculaSerieId(Long id);
 }

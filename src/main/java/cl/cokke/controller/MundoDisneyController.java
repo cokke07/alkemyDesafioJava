@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.cokke.dto.PersonajeDTO;
 import cl.cokke.model.Genero;
 import cl.cokke.model.PeliculaSerie;
 import cl.cokke.model.Personaje;
@@ -39,8 +40,8 @@ public class MundoDisneyController {
 
 	// Buscar todos los personajes y mostrarlos en la peticion
 	@GetMapping("/characters")
-	public ResponseEntity<List<Personaje>> listarTodos() {
-		List<Personaje> personajes = new ArrayList<Personaje>();
+	public ResponseEntity<List<PersonajeDTO>> listarTodos() {
+		List<PersonajeDTO> personajes = new ArrayList<PersonajeDTO>();
 		personajes = personajeServicio.buscarTodos();
 
 		if (personajes.isEmpty()) {
@@ -101,7 +102,7 @@ public class MundoDisneyController {
 			personajeEncontrado.get().setEdad(p.getEdad());
 			personajeEncontrado.get().setPeso(p.getPeso());
 			personajeEncontrado.get().setHistoria(p.getHistoria());
-			personajeEncontrado.get().setImage(p.getImage());
+			personajeEncontrado.get().setImagen(p.getImagen());
 
 			return new ResponseEntity<>(personajeServicio.guardarPersonaje(personajeEncontrado.get()), HttpStatus.OK);
 		} else {
@@ -110,20 +111,29 @@ public class MundoDisneyController {
 
 	}
 
-	// Buscar por nombre
-	@GetMapping("/characters/buscar")
-	public ResponseEntity<Personaje> buscarPersonajePorNombre(@RequestParam String nombre) {
+	// Buscar por ID pelicula
+	@GetMapping("/characters/movies")
+	public ResponseEntity<List<PersonajeDTO>> buscarPersonajePorIdPeliculaSerie(@RequestParam Long idMovie) {
 
-		Personaje personajeBuscado = personajeServicio.findByNombreContainingIgnoreCase(nombre);
+		List<PersonajeDTO> personajeBuscado = personajeServicio.findByIdPeliculaSerie(idMovie);
+
+		return new ResponseEntity<>(personajeBuscado, HttpStatus.OK);
+	}
+		
+	// Buscar por nombre
+	@GetMapping("/characters/name")
+	public ResponseEntity<List<PersonajeDTO>> buscarPersonajePorNombre(@RequestParam String nombre) {
+
+		List<PersonajeDTO> personajeBuscado = personajeServicio.findByNombreContainingIgnoreCase(nombre);
 
 		return new ResponseEntity<>(personajeBuscado, HttpStatus.OK);
 	}
 
 	// Buscar por edad
-	@GetMapping("/characters/buscarPorEdad")
-	public ResponseEntity<List<Personaje>> buscarPersonajePorEdad(@RequestParam Integer edad) {
+	@GetMapping("/characters/age")
+	public ResponseEntity<List<PersonajeDTO>> buscarPersonajePorEdad(@RequestParam Integer edad) {
 
-		List<Personaje> personajeBuscado = personajeServicio.findAllByEdad(edad);
+		List<PersonajeDTO> personajeBuscado = personajeServicio.findAllByEdad(edad);
 
 		return new ResponseEntity<>(personajeBuscado, HttpStatus.OK);
 	}
@@ -215,7 +225,7 @@ public class MundoDisneyController {
 
 	}
 
-	// Crear personajes nuevos
+	// Crear genero nuevos
 	@PostMapping("/gender")
 	public ResponseEntity<Genero> insertarGenero(@RequestBody Genero g) {
 		Genero nuevoGenero = (generoServicio.guardarGenero(g));

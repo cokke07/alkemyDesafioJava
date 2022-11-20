@@ -9,6 +9,8 @@ import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cl.cokke.dto.PersonajeDTO;
+import cl.cokke.mapper.PersonajeMapper;
 import cl.cokke.model.Personaje;
 import cl.cokke.repository.PersonajeRepository;
 
@@ -18,10 +20,14 @@ public class PersonajeServiceImp implements PersonajeService {
 	@Autowired
 	private PersonajeRepository personajeRepository;
 	
+	@Autowired
+	private PersonajeMapper personajeMapper;
+	
 	@Override
-	public List<Personaje> buscarTodos() {
+	public List<PersonajeDTO> buscarTodos() {
 		// TODO Auto-generated method stub
-		return personajeRepository.findAll();
+		List<Personaje> personajes = personajeRepository.findAll();
+		return personajeMapper.convertirAListPersonajeDTO(personajes);
 	}
 
 	@Override
@@ -49,17 +55,24 @@ public class PersonajeServiceImp implements PersonajeService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
-	public Personaje findByNombreContainingIgnoreCase(String nombre) {
-		// TODO Auto-generated method stub
-		//return personajeRepository.findByNombre(nombre);
-		return  personajeRepository.findByNombreContainingIgnoreCase(nombre);	
+	public List<PersonajeDTO> findAllByEdad(Integer edad) {
+		List<Personaje> personajes = personajeRepository.findAllByEdad(edad);
+				
+		return personajeMapper.convertirAListPersonajeDTO(personajes);
 	}
 
 	@Override
-	public List<Personaje> findAllByEdad(Integer edad) {
+	public List<PersonajeDTO> findByIdPeliculaSerie(Long id) {
 		// TODO Auto-generated method stub
-		return personajeRepository.findAllByEdad(edad);
+		List<Personaje> personajes =  personajeRepository.findByPeliculaSerieId(id);
+		
+		return personajeMapper.convertirAListPersonajeDTO(personajes);
+	}
+
+	@Override
+	public List<PersonajeDTO> findByNombreContainingIgnoreCase(String nombre) {
+		List<Personaje> personajes = personajeRepository.findByNombreContainingIgnoreCase(nombre);
+		return personajeMapper.convertirAListPersonajeDTO(personajes);
 	}
 	
 
