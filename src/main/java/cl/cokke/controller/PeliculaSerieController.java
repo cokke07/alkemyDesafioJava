@@ -23,6 +23,12 @@ import cl.cokke.model.PeliculaSerie;
 import cl.cokke.service.GeneroService;
 import cl.cokke.service.PeliculaSerieService;
 import cl.cokke.service.PersonajeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/api/v1/disney")
@@ -37,7 +43,16 @@ public class PeliculaSerieController {
 	@Autowired
 	private GeneroService generoServicio;
 
-	// Buscar todas las peliculas y series y mostrarlos en la peticion
+	//Documentacion de Path
+	@Operation(
+			security = {@SecurityRequirement(name = "Bearer") }
+			,summary = "Obtener peliculas"
+			, description = "<h3>Endpoint para obtener todas las peliculas almacenadas</h3>")
+	@ApiResponses(value = { 
+		@ApiResponse(responseCode = "200", description = "OK", content = {
+				@Content(mediaType = "application/json", schema = 
+						@Schema(implementation = PeliculaSerieDTO.class)) }) })	
+	//Fin documentacion de path
 		@GetMapping("/movies")
 		public ResponseEntity<List<PeliculaSerieDTO>> listarTodasPeliculaSeries() {
 			List<PeliculaSerieDTO> peliSeries = new ArrayList<PeliculaSerieDTO>();
@@ -50,7 +65,16 @@ public class PeliculaSerieController {
 
 		}
 
-		// Crear peliculas y series nuevas
+	//Documentacion de Path
+		@Operation(
+				security = {@SecurityRequirement(name = "Bearer") }
+				,summary = "Crear pelicula"
+				, description = "<h3>Endpoint para crear un pelicula</h3>")
+		@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "OK", content = {
+					@Content(mediaType = "application/json", schema = 
+							@Schema(implementation = PeliculaSerie.class)) }) })	
+		//Fin documentacion de path
 		@PostMapping("/movies/create")
 		public ResponseEntity<PeliculaSerie> insertarPeliculaSerie(@RequestBody PeliculaSerie p) {
 			PeliculaSerie nuevaPeliSerie = (peliculaSerieServicio.guardarPeliculaSerie(p));
@@ -58,7 +82,16 @@ public class PeliculaSerieController {
 			return new ResponseEntity<>(nuevaPeliSerie, HttpStatus.CREATED);
 		}
 
-		// Buscar peli o series por ID
+		//Documentacion de Path
+				@Operation(
+						security = {@SecurityRequirement(name = "Bearer") }
+						,summary = "Buscar pelicula por Id"
+						, description = "<h3>Endpoint para buscar una pelicula por su id</h3>")
+				@ApiResponses(value = { 
+					@ApiResponse(responseCode = "200", description = "OK", content = {
+							@Content(mediaType = "application/json", schema = 
+									@Schema(implementation = PeliculaSerie.class)) }) })	
+				//Fin documentacion de path
 		@GetMapping("/movies/{id}")
 		public ResponseEntity<PeliculaSerie> buscarPeliculaSeriePorId(@PathVariable("id") Long id) {
 
@@ -75,7 +108,16 @@ public class PeliculaSerieController {
 			}
 		}
 
-		// Eliminar peli o series pasando la ID
+		//Documentacion de Path
+		@Operation(
+			security = {@SecurityRequirement(name = "Bearer") }
+			,summary = "Eliminar pelicula"
+			, description = "<h3>Endpoint para elimnar una pelicula por Id</h3>")
+			@ApiResponses(value = { 
+				@ApiResponse(responseCode = "200", description = "OK", content = {
+					@Content(mediaType = "application/json", schema = 
+						@Schema(implementation = PeliculaSerie.class)) }) })	
+		//Fin documentacion de path
 		@DeleteMapping("/movies/{id}")
 		public ResponseEntity<HttpStatus> eliminarPeluculaSerie(@PathVariable("id") Long id) {
 
@@ -91,7 +133,16 @@ public class PeliculaSerieController {
 
 		}
 
-		// Modificar personaje pasando la ID
+		//Documentacion de Path
+				@Operation(
+					security = {@SecurityRequirement(name = "Bearer") }
+					,summary = "Actualizar pelicula"
+					, description = "<h3>Endpoint para actualizar una pelicula por Id</h3>")
+					@ApiResponses(value = { 
+						@ApiResponse(responseCode = "200", description = "OK", content = {
+							@Content(mediaType = "application/json", schema = 
+								@Schema(implementation = PeliculaSerie.class)) }) })	
+				//Fin documentacion de path
 		@PutMapping("/movies/{id}")
 		public ResponseEntity<PeliculaSerie> actualizarPeliculaSerie(@PathVariable("id") Long id,
 				@RequestBody PeliculaSerie p) {

@@ -18,10 +18,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.cokke.dto.PersonajeDTO;
+import cl.cokke.exception.RestServiceException;
 import cl.cokke.model.Personaje;
 import cl.cokke.service.GeneroService;
 import cl.cokke.service.PeliculaSerieService;
 import cl.cokke.service.PersonajeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping("/api/v1/disney")
@@ -30,7 +37,16 @@ public class PersonajeController {
 	@Autowired
 	private PersonajeService personajeServicio;
 
-	// Buscar todos los personajes y mostrarlos en la peticion
+	//Documentacion de Path
+	@Operation(
+			security = {@SecurityRequirement(name = "Bearer") }
+			,summary = "Obtener personajes"
+			, description = "<h3>Endpoint para obtener todos los personajes almacenados</h3>")
+	@ApiResponses(value = { 
+		@ApiResponse(responseCode = "200", description = "OK", content = {
+				@Content(mediaType = "application/json", schema = 
+						@Schema(implementation = PersonajeDTO.class)) }) })	
+	//Fin documentacion de path
 	@GetMapping("/characters")
 	public ResponseEntity<List<PersonajeDTO>> listarTodos() {
 		List<PersonajeDTO> personajes = new ArrayList<PersonajeDTO>();
@@ -43,7 +59,16 @@ public class PersonajeController {
 
 	}
 
-	// Crear personajes nuevos
+	//Documentacion de Path
+	@Operation(
+			security = {@SecurityRequirement(name = "Bearer") }
+			,summary = "Crear Personajes"
+			, description = "<h3>Endpoint para crear nuevos personajes</h3>")
+	@ApiResponses(value = { 
+		@ApiResponse(responseCode = "200", description = "OK", content = {
+				@Content(mediaType = "application/json", schema = 
+						@Schema(implementation = Personaje.class)) }) })	
+	//Fin documentacion de path
 	@PostMapping("/characters/create")
 	public ResponseEntity<Personaje> insertarPersonaje(@RequestBody Personaje p) {
 		Personaje nuevoPersonaje = (personajeServicio.guardarPersonaje(p));
@@ -51,7 +76,16 @@ public class PersonajeController {
 		return new ResponseEntity<>(nuevoPersonaje, HttpStatus.CREATED);
 	}
 
-	// Buscar personajes por ID
+	//Documentacion de Path
+	@Operation(
+			security = {@SecurityRequirement(name = "Bearer") }
+			,summary = "Obtener personajes por ID"
+			, description = "<h3>Endpoint para obtener personajes por Id</h3>")
+	@ApiResponses(value = { 
+		@ApiResponse(responseCode = "200", description = "OK", content = {
+				@Content(mediaType = "application/json", schema = 
+						@Schema(implementation = Personaje.class)) }) })	
+	//Fin documentacion de path
 	@GetMapping("/characters/{id}")
 	public ResponseEntity<Personaje> buscarPersonajePorId(@PathVariable("id") Long id) {
 
@@ -68,7 +102,16 @@ public class PersonajeController {
 		}
 	}
 
-	// Eliminar personajes pasando la ID
+	//Documentacion de Path
+	@Operation(
+			security = {@SecurityRequirement(name = "Bearer") }
+			,summary = "Eliminar personajes"
+			, description = "<h3>Endpoint para eliminar personajes con Id</h3>")
+	@ApiResponses(value = { 
+		@ApiResponse(responseCode = "200", description = "OK", content = {
+				@Content(mediaType = "application/json", schema = 
+						@Schema(implementation = Personaje.class)) }) })	
+	//Fin documentacion de path
 	@DeleteMapping("/characters/{id}")
 	public ResponseEntity<HttpStatus> eliminarPersonaje(@PathVariable("id") Long id) {
 
@@ -84,7 +127,16 @@ public class PersonajeController {
 
 	}
 
-	// Modificar personaje pasando la ID
+	//Documentacion de Path
+	@Operation(
+			security = {@SecurityRequirement(name = "Bearer") }
+			,summary = "Modificar personajes"
+			, description = "<h3>Endpoint para modficar personajes almacenados</h3>")
+	@ApiResponses(value = { 
+		@ApiResponse(responseCode = "200", description = "OK", content = {
+				@Content(mediaType = "application/json", schema = 
+						@Schema(implementation = Personaje.class)) }) })	
+	//Fin documentacion de path
 	@PutMapping("/characters/{id}")
 	public ResponseEntity<Personaje> actualizarUsuario(@PathVariable("id") Long id, @RequestBody Personaje p) {
 
@@ -112,7 +164,16 @@ public class PersonajeController {
 		return new ResponseEntity<>(personajeBuscado, HttpStatus.OK);
 	}
 		
-	// Buscar por nombre
+	//Documentacion de Path
+	@Operation(
+			security = {@SecurityRequirement(name = "Bearer") }
+			,summary = "Buscar personajes por nombre"
+			, description = "<h3>Endpoint para obtener todos los personajes con el nombre</h3>")
+	@ApiResponses(value = { 
+		@ApiResponse(responseCode = "200", description = "OK", content = {
+				@Content(mediaType = "application/json", schema = 
+						@Schema(implementation = PersonajeDTO.class)) }) })	
+	//Fin documentacion de path
 	@GetMapping("/characters/name")
 	public ResponseEntity<List<PersonajeDTO>> buscarPersonajePorNombre(@RequestParam String nombre) {
 
@@ -121,7 +182,16 @@ public class PersonajeController {
 		return new ResponseEntity<>(personajeBuscado, HttpStatus.OK);
 	}
 
-	// Buscar por edad
+	//Documentacion de Path
+	@Operation(
+			security = {@SecurityRequirement(name = "Bearer") }
+			,summary = "Buscar personajes por edad"
+			, description = "<h3>Endpoint para obtener todos los personajes por edad</h3>")
+	@ApiResponses(value = { 
+		@ApiResponse(responseCode = "200", description = "OK", content = {
+				@Content(mediaType = "application/json", schema = 
+						@Schema(implementation = PersonajeDTO.class)) }) })	
+	//Fin documentacion de path
 	@GetMapping("/characters/age")
 	public ResponseEntity<List<PersonajeDTO>> buscarPersonajePorEdad(@RequestParam Integer edad) {
 
