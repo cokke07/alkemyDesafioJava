@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.cokke.dto.PersonajeDTO;
-import cl.cokke.model.Genero;
-import cl.cokke.model.PeliculaSerie;
 import cl.cokke.model.Personaje;
 import cl.cokke.service.GeneroService;
 import cl.cokke.service.PeliculaSerieService;
@@ -27,16 +25,10 @@ import cl.cokke.service.PersonajeService;
 
 @RestController
 @RequestMapping("/api/v1/disney")
-public class MundoDisneyController {
+public class PersonajeController {
 
 	@Autowired
 	private PersonajeService personajeServicio;
-
-	@Autowired
-	private PeliculaSerieService peliculaSerieServicio;
-
-	@Autowired
-	private GeneroService generoServicio;
 
 	// Buscar todos los personajes y mostrarlos en la peticion
 	@GetMapping("/characters")
@@ -52,7 +44,7 @@ public class MundoDisneyController {
 	}
 
 	// Crear personajes nuevos
-	@PostMapping("/characters")
+	@PostMapping("/characters/create")
 	public ResponseEntity<Personaje> insertarPersonaje(@RequestBody Personaje p) {
 		Personaje nuevoPersonaje = (personajeServicio.guardarPersonaje(p));
 		System.out.println(nuevoPersonaje.toString());
@@ -111,7 +103,7 @@ public class MundoDisneyController {
 
 	}
 
-	// Buscar por ID pelicula
+	// Buscar por Id de pelicula
 	@GetMapping("/characters/movies")
 	public ResponseEntity<List<PersonajeDTO>> buscarPersonajePorIdPeliculaSerie(@RequestParam Long idMovie) {
 
@@ -137,100 +129,4 @@ public class MundoDisneyController {
 
 		return new ResponseEntity<>(personajeBuscado, HttpStatus.OK);
 	}
-
-	// Buscar todas las peliculas y series y mostrarlos en la peticion
-	@GetMapping("/movies")
-	public ResponseEntity<List<PeliculaSerie>> listarTodasPeliculaSeries() {
-		List<PeliculaSerie> peliSeries = new ArrayList<PeliculaSerie>();
-		peliSeries = peliculaSerieServicio.buscarTodos();
-
-		if (peliSeries.isEmpty()) {
-			return new ResponseEntity<>(peliSeries, HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<>(peliSeries, HttpStatus.OK);
-
-	}
-
-	// Crear peliculas y series nuevas
-	@PostMapping("/movies")
-	public ResponseEntity<PeliculaSerie> insertarPeliculaSerie(@RequestBody PeliculaSerie p) {
-		PeliculaSerie nuevaPeliSerie = (peliculaSerieServicio.guardarPeliculaSerie(p));
-		System.out.println(nuevaPeliSerie.toString());
-		return new ResponseEntity<>(nuevaPeliSerie, HttpStatus.CREATED);
-	}
-
-	// Buscar peli o series por ID
-	@GetMapping("/movies/{id}")
-	public ResponseEntity<PeliculaSerie> buscarPeliculaSeriePorId(@PathVariable("id") Long id) {
-
-		try {
-			Optional<PeliculaSerie> peliSerieEncontrada = peliculaSerieServicio.buscarPorId(id);
-
-			if (peliSerieEncontrada.isPresent()) {
-				return new ResponseEntity<>(peliSerieEncontrada.get(), HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	// Eliminar peli o series pasando la ID
-	@DeleteMapping("/movies/{id}")
-	public ResponseEntity<HttpStatus> eliminarPeluculaSerie(@PathVariable("id") Long id) {
-
-		Optional<PeliculaSerie> peliSerieEncontrada = peliculaSerieServicio.buscarPorId(id);
-
-		if (peliSerieEncontrada.isPresent()) {
-			peliculaSerieServicio.eliminarPeliculaSerie(id);
-			System.out.println("Pelicula o serie eliminada");
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-	}
-
-	// Modificar personaje pasando la ID
-	@PutMapping("/movies/{id}")
-	public ResponseEntity<PeliculaSerie> actualizarPeliculaSerie(@PathVariable("id") Long id,
-			@RequestBody PeliculaSerie p) {
-
-		Optional<PeliculaSerie> peliSerieEncontrada = peliculaSerieServicio.buscarPorId(id);
-		if (peliSerieEncontrada.isPresent()) {
-			peliSerieEncontrada.get().setTitulo(p.getTitulo());
-			peliSerieEncontrada.get().setFechaCreacion(p.getFechaCreacion());
-			peliSerieEncontrada.get().setCalificacion(p.getCalificacion());
-			peliSerieEncontrada.get().setPersonajes(p.getPersonajes());
-
-			return new ResponseEntity<>(peliculaSerieServicio.guardarPeliculaSerie(peliSerieEncontrada.get()),
-					HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-	}
-
-	// Buscar todos los generos y mostrarlos en la peticion
-	@GetMapping("/gender")
-	public ResponseEntity<List<Genero>> listarTodosGeneros() {
-		List<Genero> generos = new ArrayList<Genero>();
-		generos = generoServicio.buscarTodos();
-
-		if (generos.isEmpty()) {
-			return new ResponseEntity<>(generos, HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<>(generos, HttpStatus.OK);
-
-	}
-
-	// Crear genero nuevos
-	@PostMapping("/gender")
-	public ResponseEntity<Genero> insertarGenero(@RequestBody Genero g) {
-		Genero nuevoGenero = (generoServicio.guardarGenero(g));
-		System.out.println(nuevoGenero.toString());
-		return new ResponseEntity<>(nuevoGenero, HttpStatus.CREATED);
-	}
-
 }

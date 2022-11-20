@@ -32,7 +32,7 @@ public class WebSecurityConfig {
 		.antMatchers("/swagger-ui/**").permitAll()
 		.antMatchers("/docs/**").permitAll()
 		.antMatchers("/auth/**").permitAll()
-		.antMatchers("/api/v1/disney/**").permitAll()
+		.antMatchers("/api/v1/disney/**").hasAnyAuthority("ADMIN")
 		.anyRequest().authenticated();
 
 		http.exceptionHandling().accessDeniedPage("/login");
@@ -60,10 +60,10 @@ public class WebSecurityConfig {
 								new SecurityScheme()
 								.type(SecurityScheme.Type.HTTP)
 								.scheme("Bearer")
-								.bearerFormat("JWT")))
-				.info(new Info()
-						.title("Documentación API Disney")
-						.description("API Disney 2.0 desafio Alkemys"));
+								.bearerFormat("JWT")));
+				// .info(new Info()
+				//		.title("Documentación API Disney")
+				//		.description("API Disney 2.0 desafio Alkemys"));
 
 	}
 	
