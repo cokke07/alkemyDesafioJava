@@ -55,17 +55,24 @@ public class PersonajeServiceImp implements PersonajeService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
-	public Personaje findByNombreContainingIgnoreCase(String nombre) {
-		// TODO Auto-generated method stub
-		//return personajeRepository.findByNombre(nombre);
-		return  personajeRepository.findByNombreContainingIgnoreCase(nombre);	
+	public List<PersonajeDTO> findAllByEdad(Integer edad) {
+		List<Personaje> personajes = personajeRepository.findAllByEdad(edad);
+				
+		return personajeMapper.convertirAListPersonajeDTO(personajes);
 	}
 
 	@Override
-	public List<Personaje> findAllByEdad(Integer edad) {
+	public List<PersonajeDTO> findByIdPeliculaSerie(Long id) {
 		// TODO Auto-generated method stub
-		return personajeRepository.findAllByEdad(edad);
+		List<Personaje> personajes =  personajeRepository.findByPeliculaSerieId(id);
+		
+		return personajeMapper.convertirAListPersonajeDTO(personajes);
+	}
+
+	@Override
+	public List<PersonajeDTO> findByNombreContainingIgnoreCase(String nombre) {
+		List<Personaje> personajes = personajeRepository.findByNombreContainingIgnoreCase(nombre);
+		return personajeMapper.convertirAListPersonajeDTO(personajes);
 	}
 	
 
