@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cl.cokke.dto.PersonajeDTO;
+import cl.cokke.exception.BadRecuestException;
 import cl.cokke.mapper.PersonajeMapper;
 import cl.cokke.model.Personaje;
 import cl.cokke.repository.PersonajeRepository;
@@ -25,9 +26,14 @@ public class PersonajeServiceImp implements PersonajeService {
 	
 	@Override
 	public List<PersonajeDTO> buscarTodos() {
-		// TODO Auto-generated method stub
+		
 		List<Personaje> personajes = personajeRepository.findAll();
-		return personajeMapper.convertirAListPersonajeDTO(personajes);
+		if(personajes.isEmpty()) {
+			throw new BadRecuestException(" No se encontraron personajes");
+		}else {
+			return personajeMapper.convertirAListPersonajeDTO(personajes);
+		}
+		
 	}
 
 	@Override
