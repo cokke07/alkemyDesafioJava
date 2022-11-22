@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.cokke.dto.LoginDTO;
+import cl.cokke.exception.BadRecuestException;
 import cl.cokke.model.User;
 import cl.cokke.service.UserService;
 
@@ -47,8 +48,12 @@ public class AuthController {
 	
 	@GetMapping
 	public ResponseEntity<List<User>> findAll() {
-		
-		return ResponseEntity.ok().body(userService.findAll());
+		if(userService.findAll().isEmpty()) {
+			throw new BadRecuestException(" No se encontraron usuarios");
+		}else {
+			return ResponseEntity.ok().body(userService.findAll());
+		}
+
 	}
 
 }
