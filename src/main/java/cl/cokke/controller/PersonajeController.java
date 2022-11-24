@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException.Forbidden;
 
 import cl.cokke.dto.PersonajeDTO;
+import cl.cokke.exception.ForbiddenException;
 import cl.cokke.exception.RestServiceException;
 import cl.cokke.model.Personaje;
 import cl.cokke.service.GeneroService;
@@ -71,10 +73,14 @@ public class PersonajeController {
 	//Fin documentacion de path
 	@PostMapping("/characters/create")
 	public ResponseEntity<Personaje> insertarPersonaje(@RequestBody Personaje p) {
+		
 		Personaje nuevoPersonaje = (personajeServicio.guardarPersonaje(p));
 		System.out.println(nuevoPersonaje.toString());
+		
 		return new ResponseEntity<>(nuevoPersonaje, HttpStatus.CREATED);
+		
 	}
+	
 
 	//Documentacion de Path
 	@Operation(
