@@ -44,7 +44,7 @@ public class PersonajeServiceImp implements PersonajeService {
 
 	@Override
 	public Personaje guardarPersonaje(Personaje p) {
-		// TODO Auto-generated method stub
+		
 		return personajeRepository.save(p);
 	}
 

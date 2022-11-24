@@ -38,7 +38,7 @@ public class AuthController {
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<User> crearUsuario(@RequestBody User User) {
+	public ResponseEntity<User> crearUsuario(@RequestBody User User){
 		//System.out.println(User);
 		userService.crearUser(User);
 		System.out.println("Role: " + User.getRoles());
